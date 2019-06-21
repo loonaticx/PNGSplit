@@ -22,9 +22,14 @@ public class convertImage implements importFile, exportFile {
     private BufferedImage importImage;
     private int width;
     private int height;
+    private String fileName;
 
+    public convertImage (String fileName) {
+       this.fileName = fileName;
+    }
     public convertImage(File fileLoc) throws IOException {
         this.fileLoc = fileLoc;
+        this.fileName = fileLoc.getName();
         importImage = ImageIO.read(fileLoc);
         //importImage = ImageIO.read(this.getClass().getResource(fileName));
         importFile(importImage);
@@ -37,9 +42,9 @@ public class convertImage implements importFile, exportFile {
 
     public boolean export(BufferedImage outputImage) {
         boolean check = false;
-        File outputFile = new File("save.png");
+        File outputFile = new File(fileName + "_a.rgb");
         try {
-            ImageIO.write(outputImage, "png", outputFile);
+            ImageIO.write(outputImage, "rgb", outputFile);
             check = true;
         } catch (IOException e) {
             e.printStackTrace();

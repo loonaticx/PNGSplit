@@ -4,6 +4,11 @@
  * https://docs.oracle.com/javase/tutorial/uiswing/examples/components/FileChooserDemo2Project/src/components/FileChooserDemo2.java
  */
 
+import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,9 +22,11 @@ public class fileChooserGUI extends JPanel implements ActionListener {
     private JTextArea log;
     private JFileChooser fc;
     private JViewport view;
+    private JButton splitButton;
 
     public fileChooserGUI() {
-        super(new BorderLayout());
+        //super(new BorderLayout());
+        BorderPane b = new BorderPane();
 
         //Create the log first, because the action listener
         //needs to refer to it.
@@ -28,16 +35,49 @@ public class fileChooserGUI extends JPanel implements ActionListener {
         log.setEditable(false);
         JScrollPane logScrollPane = new JScrollPane(log);
 
-        JButton sendButton = new JButton("Attach...");
-        sendButton.addActionListener(this);
+        JButton uploadButton = new JButton("Upload File");
+        uploadButton.addActionListener(this);
 
-        view = new JViewport();
+        splitButton = new JButton("PNG Split");
+        splitButton.addActionListener(this);
 
-        add(sendButton, BorderLayout.PAGE_START);
+        //view = new JViewport();
+
+        add(uploadButton, BorderLayout.PAGE_START);
+        add(splitButton, BorderLayout.CENTER);
         add(logScrollPane, BorderLayout.CENTER);
     }
 
+    public HBox addHBox() {
+        HBox hbox = new HBox();
+        hbox.setSpacing(10);
+        hbox.setStyle("-fx-background-color: #336699;");
+        TextField field = new TextField();
+        //hbox.getChildren().addAll(new Label("Search:"), field, new Button("Go"));
+
+        return hbox;
+    }
+
+
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == splitButton && fc != null) {
+            int returnVal = fc.showSaveDialog(fileChooserGUI.this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                try {
+                    new convertImage(file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                log.append("Converting: " + file.getName() + "." + newline);
+            } else {
+                log.append("Converting cancelled by user." + newline);
+            }
+            log.setCaretPosition(log.getDocument().getLength());
+        }
+        if (e.getSource() == splitButton && fc == null) {
+            log.append("You must attach an image first.");
+        }
         //Set up the file chooser.
         if (fc == null) {
             fc = new JFileChooser();
@@ -80,7 +120,7 @@ public class fileChooserGUI extends JPanel implements ActionListener {
      */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("FileChooserDemo2");
+        JFrame frame = new JFrame("PNG Split Tool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Add content to the window.

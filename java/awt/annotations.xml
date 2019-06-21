@@ -1,0 +1,5 @@
+<root>
+    <item name='java.awt.Label'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>
