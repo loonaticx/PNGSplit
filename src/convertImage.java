@@ -48,9 +48,10 @@ public class convertImage implements importFile, exportFile {
 
     public boolean export(BufferedImage outputImage) {
         boolean check = false;
-        File outputFile = new File("saved.png");
+        File outputFile = new File(fileName);
         try {
             ImageIO.write(outputImage, "png", outputFile);
+            outputFile.renameTo(new File(outputFile.toString().replace(".png", "_a.rgb")));
             check = true;
         } catch (IOException e) {
             e.printStackTrace();

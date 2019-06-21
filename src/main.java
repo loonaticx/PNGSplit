@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) throws IOException {
-        File input = new File("G:\\Work Folder\\Development\\PNGSplit\\src\\test1.png");
-        new convertImage(); //this should get the name of the file, which is grabbed from main method.
+        File input = new File("src/test1.png");
+        new convertImage(input); //this should get the name of the file, which is grabbed from main method.
     }
 }
